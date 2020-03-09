@@ -52,10 +52,16 @@ stages:
     strategy:
       runOnce:
         deploy:
-          steps:            
+          steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'specific'
+              itemPattern: 'drop/**'
+              downloadPath: '$(System.ArtifactsDirectory)'
           - task: AzureFileCopy@4
             inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/build'
+              SourcePath: '$(System.ArtifactsDirectory)'
               azureSubscription: 'Omegapoint Lab (d2245c54-7bbf-4a04-8b8c-e05622b29fc5)'
               Destination: 'AzureBlob'
               storage: 'joellab2storage'
