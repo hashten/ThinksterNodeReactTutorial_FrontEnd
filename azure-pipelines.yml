@@ -35,7 +35,7 @@ stages:
     - task: ArchiveFiles@2
       displayName: 'Archive build and copy to artifactStagingDirectory'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
+        rootFolderOrFile: '$(Build.SourcesDirectory)/build'
         includeRootFolder: true
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
