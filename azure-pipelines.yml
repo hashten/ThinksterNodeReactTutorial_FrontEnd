@@ -44,14 +44,12 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: 'az storage blob service-properties update --account-name joellab2storage --static-website  --index-document index.html'
-    - task: CmdLine@2
+    - task: AzureCLI@2
+      displayName: Copy build to static storage
       inputs:
-        script: 'ls $(System.DefaultWorkingDirectory)/build'
-    - task: AzureFileCopy@4
-      inputs:
-        SourcePath: $(System.DefaultWorkingDirectory)/build
         azureSubscription: 'Omegapoint Lab (d2245c54-7bbf-4a04-8b8c-e05622b29fc5)'
-        Destination: 'AzureBlob'
-        storage: 'joellab2storage'
-        ContainerName: '$web'
-        
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'az storage blob upload-batch -d "$web" --account-name "joellab2storage" -s "$(System.ArtifactsDirectory)/drop/"'
+
+            
