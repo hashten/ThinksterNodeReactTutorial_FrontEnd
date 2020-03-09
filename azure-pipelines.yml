@@ -38,9 +38,15 @@ stages:
         PathtoPublish: $(System.DefaultWorkingDirectory)/build
         ArtifactName: 'drop'
         publishLocation: 'Container'
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'Omegapoint Lab (d2245c54-7bbf-4a04-8b8c-e05622b29fc5)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'az storage blob service-properties update --account-name joellab2storage --static-website  --index-document index.html'
     - task: AzureFileCopy@4
       inputs:
-        SourcePath: '$(Build.ArtifactStagingDirectory)/drop'
+        SourcePath: $(System.DefaultWorkingDirectory)/build
         azureSubscription: 'Omegapoint Lab (d2245c54-7bbf-4a04-8b8c-e05622b29fc5)'
         Destination: 'AzureBlob'
         storage: 'joellab2storage'
