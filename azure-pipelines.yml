@@ -55,7 +55,7 @@ stages:
           steps:            
           - task: AzureFileCopy@4
             inputs:
-              SourcePath: '$(Pipeline.Workspace)/drop/'
+              SourcePath: '$(System.DefaultWorkingDirectory)/build'
               azureSubscription: 'Omegapoint Lab (d2245c54-7bbf-4a04-8b8c-e05622b29fc5)'
               Destination: 'AzureBlob'
               storage: 'joellab2storage'
