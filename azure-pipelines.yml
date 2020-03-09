@@ -44,6 +44,9 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: 'az storage blob service-properties update --account-name joellab2storage --static-website  --index-document index.html'
+    - task: CmdLine@2
+      inputs:
+        script: 'ls $(System.DefaultWorkingDirectory)/build'
     - task: AzureFileCopy@4
       inputs:
         SourcePath: $(System.DefaultWorkingDirectory)/build
