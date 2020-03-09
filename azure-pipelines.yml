@@ -7,7 +7,8 @@ trigger:
 - master
 
 stages:
-- stage: build
+- stage: Build
+  displayName: Build stage
   jobs:
   - job: build
     pool:
@@ -23,19 +24,19 @@ stages:
     - task: Npm@1
       displayName: 'Install Npm'
       inputs:
-        workingDir: '$System.DefaultWorkingDirectory'
+        workingDir: '$(System.DefaultWorkingDirectory)'
         command: install
 
     - task: Npm@1
       displayName: 'Build Application'
       inputs:
-        workingDir: '$System.DefaultWorkingDirectory'
+        workingDir: '$(System.DefaultWorkingDirectory)'
         command: custom
         customCommand: run-script build
     - task: ArchiveFiles@2
       displayName: 'Archive build and copy to artifactStagingDirectory'
       inputs:
-        rootFolderOrFile: '$(Build.SourcesDirectory)/build'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
         includeRootFolder: true
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
@@ -46,3 +47,25 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
+        
+- stage: Deploy
+  displayName: Deploy static website to storage account
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: joel-lab2-webapp.frontend
+    pool: 
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:            
+          - task: AzureFileCopy@4
+            inputs:
+              SourcePath: '$(System.DefaultWorkingDirectory)/build'
+              azureSubscription: 'Omegapoint Lab (d2245c54-7bbf-4a04-8b8c-e05622b29fc5)'
+              Destination: 'AzureBlob'
+              storage: 'joellab2storage'
+              ContainerName: '$web'
