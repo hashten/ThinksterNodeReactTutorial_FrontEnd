@@ -55,9 +55,9 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: joel-lab2-webapp.frontend
+    environment: joellab2storage
     pool: 
-      vmImage: $(vmImageName)
+      vmImage: 'ubuntu-latest'
     strategy:
       runOnce:
         deploy:
