@@ -50,6 +50,6 @@ stages:
         azureSubscription: 'Omegapoint Lab (d2245c54-7bbf-4a04-8b8c-e05622b29fc5)'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: 'az storage blob upload-batch -d "$web" --account-name joellab2storage -s "$(System.DefaultWorkingDirectory)/build"'
+        inlineScript: 'az storage blob upload-batch -d "$web" --account-name joellab2storage -s $(SYSTEM_DEFAULTWORKINGDIRECTORY))/build'
 
             
